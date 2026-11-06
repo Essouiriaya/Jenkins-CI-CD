@@ -7,6 +7,11 @@ pipeline {
         APP_MODULE = 'app:app'
     }
 
+    // Declenchement automatique
+    triggers {
+        githubPush()
+    }
+
     stages {
 
         // 1. Recuperation du code source depuis GitHub
@@ -18,10 +23,6 @@ pipeline {
             }
         }
 
-        // Declenchement automatique toutes les 5 minutes
-        triggers {
-            cron('H/5 * * * *')
-        }
 
         // 2. Preparation de l'environnement Python
         stage('Setup Python Environment') {
