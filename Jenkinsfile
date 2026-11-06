@@ -36,8 +36,20 @@ pipeline {
             }
         }
 
+        
+
         // 3. Execution des tests
         stage('Run Tests') {
+
+
+            // Executer les tests seulement si README.md
+            // n'a pas ete modifie
+            when {
+                not {
+                    changeset "README.md"
+                }
+            }
+
             parallel {
 
                 stage('Test App 1') {
@@ -61,6 +73,13 @@ pipeline {
         }
 
         stage('Generate Coverage Report') {
+
+            when {
+                not {
+                    changeset "README.md"
+                }
+            } 
+            
             steps {
                 sh '''
                     . venv/bin/activate
