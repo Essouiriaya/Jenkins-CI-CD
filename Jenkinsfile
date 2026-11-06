@@ -18,6 +18,11 @@ pipeline {
             }
         }
 
+        // Declenchement automatique toutes les 5 minutes
+        triggers {
+            cron('H/5 * * * *')
+        }
+
         // 2. Preparation de l'environnement Python
         stage('Setup Python Environment') {
             steps {
