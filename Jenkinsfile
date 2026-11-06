@@ -38,13 +38,38 @@ pipeline {
 
         // 3. Execution des tests
         stage('Run Tests') {
+            parallel {
+
+                stage('Test App 1') {
+                    steps {
+                        sh '''
+                            . venv/bin/activate
+                            COVERAGE_FILE=.coverage.app1 pytest --cov -v test_app.py
+                        '''
+                    }
+                }
+
+                stage('Test App 2') {
+                    steps {
+                        sh '''
+                            . venv/bin/activate
+                            COVERAGE_FILE=.coverage.app2 pytest --cov -v test_app_2.py
+                        '''
+                    }
+                }
+            }
+        }
+
+        stage('Generate Coverage Report') {
             steps {
                 sh '''
                     . venv/bin/activate
-                    pytest --cov
+                    coverage combine
+                    coverage report
                 '''
             }
         }
+
 
         // 4. Deploiement de l'application Flask
         stage('Deploy Application') {
